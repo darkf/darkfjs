@@ -3,7 +3,7 @@
 "use strict";
 
 // Map, over both objects, arrays, and strings.
-// Over strings, behaves like concatMap.
+// Over strings, behaves like flatMap.
 function map(f, xs) {
     if(typeof xs === "string")
         return map(f, xs.split("")).join("");
@@ -33,12 +33,16 @@ function flatten(xs) {
     return [].concat.apply([], xs);
 }
 
+// Flatten and map over an array
 function flatMap(f, xs) { return flatten(map(f, xs)); }
 
+// Returns a function obtaining the property `prop` from the object passed in.
+// Useful for using in conjunction with `map` -- e.g. map(itemgetter('name'), people)
 function itemgetter(prop) {
     return function(obj) { return obj[prop]; };
 }
 
+// Left-pads a string representing an integer `n` with zeroes, to fit `length`.
 function zeropad(n, length) {
     return (new Array(length).fill("0").join("") + n).slice(-length)
 }
@@ -49,4 +53,20 @@ function copy(xs) {
         return xs.slice();
 
     return Object.assign({}, xs);
+}
+
+// Give the range [start, end) in increments of `step`.
+// If only one argument is given, it is assumed to be `end`.
+function range(start, end, step) {
+    if(end === undefined) {
+        end = start;
+        start = 0;
+    }
+
+    step = step || 1;
+
+    const r = [];
+    for(let i = start; i < end; i += step)
+        r.push(i);
+    return r;
 }
