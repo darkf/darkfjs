@@ -62,3 +62,18 @@ function matrixMap(f, matrix) {
     const size = matrixSize(matrix);
     return newMatrix(size[0], size[1], (x,y) => f(matrix[y][x], x, y));
 }
+
+// Create a matrix from a string of lines
+function matrixFromString(s, trim) {
+    const lines = s.split("\n");
+    const matrix = new Array(lines.length);
+
+    for(let row = 0; row < lines.length; row++) {
+        let line = lines[row];
+        if(trim)
+            line = line.trim();
+        matrix[row] = line.split("");
+    }
+
+    return matrix;
+}
