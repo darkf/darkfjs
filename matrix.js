@@ -2,15 +2,15 @@
 
 "use strict";
 
-// Construct a new NxM matrix, with an optional initializer (a function X,Y -> value, or just a value.)
-// Matrices are indexed as M[row][col]
-function newMatrix(rows, cols, initializer) {
-    const matrix = new Array(rows);
-    for(let row = 0; row < rows; row++) {
-        matrix[row] = new Array(cols);
+// Construct a new WxH matrix, with an optional initializer (a function X,Y -> value, or just a value.)
+// Matrices are indexed as M[y][x]
+function newMatrix(width, height, initializer) {
+    const matrix = new Array(height);
+    for(let row = 0; row < height; row++) {
+        matrix[row] = new Array(width);
 
         if(typeof initializer === "function") {
-            for(let col = 0; col < cols; col++)
+            for(let col = 0; col < width; col++)
                 matrix[row][col] = initializer(col, row);
         }
         else if(initializer !== undefined)
@@ -40,4 +40,25 @@ function matrixSet(matrix, x, y, value) {
 
 function matrixModify(matrix, x, y, f) {
     return matrixSet(matrix, x, y, f(matrixGet(matrix, x, y)));
+}
+
+// Returns all indices of a matrix.
+function matrixIndices(matrix) {
+    const indices = [];
+    for(let y = 0; y < matrix.length; y++) {
+        for(let x = 0; x < matrix[0].length; x++)
+            indices.push([x, y]);
+    }
+    return indices;
+}
+
+// Returns the [width, height] of the matrix.
+function matrixSize(matrix) {
+    return [matrix[0].length, matrix.length];
+}
+
+// Map over a matrix.
+function matrixMap(f, matrix) {
+    const size = matrixSize(matrix);
+    return newMatrix(size[0], size[1], (x,y) => f(matrix[y][x], x, y));
 }
