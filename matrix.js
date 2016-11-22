@@ -57,6 +57,12 @@ function matrixSize(matrix) {
     return [matrix[0].length, matrix.length];
 }
 
+// Shallow copy a matrix
+function matrixCopy(matrix) {
+    const size = matrixSize(matrix);
+    return newMatrix(size[0], size[1], (x,y) => matrix[y][x]);
+}
+
 // Map over a matrix.
 function matrixMap(f, matrix) {
     const size = matrixSize(matrix);
@@ -65,13 +71,17 @@ function matrixMap(f, matrix) {
 
 // Create a matrix from a string of lines
 function matrixFromString(s, trim) {
-    const lines = s.split("\n");
+    const lines = s.split("\n").filter(s => s);
     const matrix = new Array(lines.length);
 
     for(let row = 0; row < lines.length; row++) {
         let line = lines[row];
         if(trim)
             line = line.trim();
+
+        if(!line) // empty lines terminate
+            break;
+
         matrix[row] = line.split("");
     }
 
